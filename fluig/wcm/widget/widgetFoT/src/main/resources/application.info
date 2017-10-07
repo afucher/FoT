@@ -1,0 +1,14 @@
+application.type=widget
+application.code=widgetFoT
+application.title=widgetFoT
+application.description=FoT
+application.category=FoT
+application.renderer=freemarker
+developer.code=SPON5044
+developer.name=claudio.koji
+developer.url=http://www.fluig.com
+application.uiwidget=true
+application.mobileapp=false
+view.file=view.ftl
+edit.file=edit.ftl
+
