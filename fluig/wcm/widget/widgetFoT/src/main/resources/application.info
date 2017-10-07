@@ -11,4 +11,6 @@ application.uiwidget=true
 application.mobileapp=false
 view.file=view.ftl
 edit.file=edit.ftl
+locale.file.base.name=widgetFoT
+application.resource.js.1=/resources/js/widgetFoT.js
 
