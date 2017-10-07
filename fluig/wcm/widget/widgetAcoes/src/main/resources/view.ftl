@@ -32,7 +32,7 @@
 			    	</div>
 			    </div>
 			    
-			    <button type="submit" class="btn btn-default" data-acao-add>Incluir</button>
+			    <button type="button" class="btn btn-default" data-acao-add>Incluir</button>
 			    <script>
 			    	$("#categoria_${instanceId}").change(function() {
 						var $cat = $(this);
