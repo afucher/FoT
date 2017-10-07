@@ -52,12 +52,28 @@ var widgetGatilhos = SuperWidget.extend({
     //BIND de eventos
     bindings: {
         local: {
-            'execute': ['click_executeAction']
+            'execute': ['click_executeAction'],
+            'gatilho-add' : [ 'click_gatilhoAdd' ]
         },
         global: {}
     },
  
     executeAction: function(htmlElement, event) {
+    },
+    
+    gatilhoAdd: function() {
+    	var nome = $('#nome_' + this.instanceId, this.DOM).val();
+    	var categoria = $('#categoria_' + this.instanceId, this.DOM).val();
+    	var tipo = $('#tipo_' + this.instanceId, this.DOM).val();
+    	
+    	if( !nome || !categoria || !tipo ) {
+    		FLUIGC.toast({
+				title : 'Desculpe', 
+				message : 'Todos os campos são obrigatórios.',
+				type : 'danger',
+				timeout : "4000"
+			});
+    	}
     }
 
     

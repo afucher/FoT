@@ -11,21 +11,28 @@
 			        <label for="nome">Nome</label>
 			        <input type="text" class="form-control" id="nome_${instanceId}" placeholder="Digite o nome do gatilho">
 			    </div>
-			    <div class="form-group">
-			        <label for="categoria">Categoria</label>
-			        <select class="form-control" id="categoria_${instanceId}" name="categoria_${instanceId}">
-			        	<option></option>
-					    <option value="sensores">Sensores</option>
-					    <option value="workflows">Workflows</option>
-					    <option value="documentos">Documentos</option>
-					</select>
+			    <div class="row">
+			    	<div class="col-sm-6">
+				    	<div class="form-group">
+					        <label for="categoria">Categoria</label>
+					        <select class="form-control" id="categoria_${instanceId}" name="categoria_${instanceId}">
+					        	<option></option>
+							    <option value="sensores">Sensores</option>
+							    <option value="workflows">Workflows</option>
+							    <option value="documentos">Documentos</option>
+							</select>
+					    </div>
+			    	</div>
+			    	<div class="col-sm-6">
+				    	<div class="form-group">
+					        <label for="tipo">Tipo</label>
+					        <select class="form-control" id="tipo_${instanceId}">
+							</select>
+					    </div>
+			    	</div>
 			    </div>
-			    <div class="form-group">
-			        <label for="tipo">Tipo</label>
-			        <select class="form-control" id="tipo_${instanceId}">
-					</select>
-			    </div>
-			    <button type="submit" class="btn btn-default">Incluir</button>
+			    
+			    <button type="button" class="btn btn-default" data-gatilho-add>Incluir</button>
 			</form>
 	    </div>
 	</div>
