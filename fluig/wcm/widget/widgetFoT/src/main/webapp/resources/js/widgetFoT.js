@@ -119,7 +119,6 @@ var widgetFoT = SuperWidget.extend({
     	var nome = $('#nome_' + this.instanceId, this.DOM).val();
     	var comportamento = $('#comportamento_' + this.instanceId, this.DOM).val();
     	var valor = $('#valor_' + this.instanceId, this.DOM).val();
-    	debugger;
     	if( !idGatilho || !nome || !comportamento || !valor ) {
     		FLUIGC.toast({
 				title : 'Desculpe', 
