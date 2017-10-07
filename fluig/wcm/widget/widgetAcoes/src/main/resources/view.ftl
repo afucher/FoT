@@ -5,26 +5,34 @@
 	        <h3 class="panel-title">Cadastro de Ações</h3>
 	    </div>
 	    <div class="panel-body">
-	        <form role="form">
+	        <form role="form" onSubmit="data-aprovador-add">
 			    <div class="form-group">
 			        <label for="nome">Nome</label>
 			        <input type="text" class="form-control" id="nome_${instanceId}" placeholder="Digite o nome da ação" required>
 			    </div>
-			    <div class="form-group">
-			        <label for="categoria">Categoria</label>
-			        <select class="form-control" id="categoria_${instanceId}" required>
-					    <option value="sensores">Atuador</option>
-					    <option value="workflow">Workflow</option>
-					    <option value="documento">Documento</option>
-					</select>
+			    <div class="row">
+			    	<div class="col-sm-6">
+			    		<div class="form-group">
+					        <label for="categoria">Categoria</label>
+					        <select class="form-control" id="categoria_${instanceId}" required>
+					        	<option></option>
+							    <option value="sensores">Atuador</option>
+							    <option value="workflow">Workflow</option>
+							    <option value="documento">Documento</option>
+							</select>
+					    </div>
+			    	</div>
+			    	<div class="col-sm-6">
+						<div class="form-group">
+					        <label for="tipo">Tipo</label>
+					        <select class="form-control" id="tipo_${instanceId}" required>
+							    					    
+							</select>
+					    </div>			    	
+			    	</div>
 			    </div>
-			    <div class="form-group">
-			        <label for="tipo">Tipo</label>
-			        <select class="form-control" id="tipo_${instanceId}" required>
-					    					    
-					</select>
-			    </div>
-			    <button type="submit" class="btn btn-default">Incluir</button>
+			    
+			    <button type="submit" class="btn btn-default" data-acao-add>Incluir</button>
 			    <script>
 			    	$("#categoria_${instanceId}").change(function() {
 						var $cat = $(this);
