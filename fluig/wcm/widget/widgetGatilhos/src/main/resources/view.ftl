@@ -13,7 +13,8 @@
 			    </div>
 			    <div class="form-group">
 			        <label for="categoria">Categoria</label>
-			        <select class="form-control" id="categoria_${instanceId}">
+			        <select class="form-control" id="categoria_${instanceId}" name="categoria_${instanceId}">
+			        	<option></option>
 					    <option value="sensores">Sensores</option>
 					    <option value="workflows">Workflows</option>
 					    <option value="documentos">Documentos</option>
@@ -22,9 +23,6 @@
 			    <div class="form-group">
 			        <label for="tipo">Tipo</label>
 			        <select class="form-control" id="tipo_${instanceId}">
-					    <option>Sensores</option>
-					    <option>Workflows</option>
-					    <option>Documentos</option>
 					</select>
 			    </div>
 			    <button type="submit" class="btn btn-default">Incluir</button>
