@@ -1,16 +1,24 @@
-var MyWidget = SuperWidget.extend({
-    //variáveis da widget
+var widgetGatilhos = SuperWidget.extend({
+	instanceId: null,
+	widgetURI: null,
     variavelNumerica: null,
     variavelCaracter: null,
 
-    //método iniciado quando a widget é carregada
     init: function() {
+    	var $this = this;
+    	widgetGatilhos.widgetURI = this.widgetURI;
+    	widgetGatilhos.instanceId = this.instanceId
+        
+    	$('#categoria' + this.instanceId, this.DOM).on('change', function() {
+	        alert( $('#categoria' + + this.instanceId).val());    
+	    });
     },
   
     //BIND de eventos
     bindings: {
         local: {
-            'execute': ['click_executeAction']
+            'execute': ['click_executeAction'],
+            'category-changed' : [ 'change_Category' ]
         },
         global: {}
     },
@@ -18,5 +26,6 @@ var MyWidget = SuperWidget.extend({
     executeAction: function(htmlElement, event) {
     }
 
+    
 });
 

@@ -11,4 +11,5 @@ application.uiwidget=true
 application.mobileapp=false
 view.file=view.ftl
 edit.file=edit.ftl
-
+locale.file.base.name=widgetGatilhos
+application.resource.js.1=/resources/js/widgetGatilhos.js
