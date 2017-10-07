@@ -59,10 +59,36 @@
 		    <div class="panel-body">
 		        <form role="form">
 				    <div class="form-group">
+				        <label for="nome">ID</label>
+				        <input type="text" class="form-control" id="idGatilho_${instanceId}" placeholder="Digite o ID do gatilho" required>
+				    </div>
+				    <div class="form-group">
 				        <label for="nome">Nome</label>
-				        <input type="text" class="form-control" id="nome_${instanceId}" placeholder="Digite o nome do gatilho">
+				        <input type="text" class="form-control" id="nome_${instanceId}" placeholder="Digite o nome do gatilho" required>
 				    </div>
 				    <div class="row">
+				    	<div class="col-sm-6">
+					    	<div class="form-group">
+						        <label for="nome">Comportamento</label>
+						        <select class="form-control" id="comportamento_${instanceId}" required>
+						        	<option></option>
+								    <option value="maiorIgual">Maior igual</option>
+								    <option value="menorIgual">Menor igual</option>
+								    <option value="maior">Maior</option>
+								    <option value="maior">Menor</option>
+								    <option value="variacaoPositiva">Variação positiva</option>
+								    <option value="variacaoNegativa">Variação negativa</option>
+								    <option value="igual">Igual</option>
+								</select>
+						    </div>	
+				    	</div>
+				    	<div class="col-sm-6 form-group">
+					    	<label for="nome">Valor</label>
+					    	<input type="number" class="form-control" id="valor_${instanceId}" placeholder="Valor do gatilho" required>
+				    	</div>
+				    </div>
+				    
+				    <!-- <div class="row">
 				    	<div class="col-sm-6">
 					    	<div class="form-group">
 						        <label for="categoria">Categoria</label>
@@ -70,7 +96,6 @@
 						        	<option></option>
 								    <option value="sensores">Sensores</option>
 								    <option value="workflows">Workflows</option>
-								    <option value="documentos">Documentos</option>
 								</select>
 						    </div>
 				    	</div>
@@ -81,7 +106,7 @@
 								</select>
 						    </div>
 				    	</div>
-				    </div>
+				    </div> -->
 				    
 				    <button type="button" class="btn btn-default" data-gatilho-add>Incluir</button>
 				</form>
@@ -108,7 +133,6 @@
 						        	<option></option>
 								    <option value="sensores">Atuador</option>
 								    <option value="workflow">Workflow</option>
-								    <option value="documento">Documento</option>
 								</select>
 						    </div>
 				    	</div>
@@ -135,8 +159,6 @@
 								case 'workflow':
 									vals = ['Iniciar', 'Movimentar'];
 									break;
-								case 'documento':
-									vals = ['Criar', 'Aprovar'];
 							}
 							var $tipo = $("#tipoAc_${instanceId}");
 							$tipo.empty();

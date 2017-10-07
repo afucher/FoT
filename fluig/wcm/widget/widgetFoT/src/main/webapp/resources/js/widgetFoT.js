@@ -34,9 +34,6 @@ var widgetFoT = SuperWidget.extend({
 	        	case 'workflows':
 	        		opts = ['Ao iniciar', 'Ao movimentar'];
 	        		break;
-	        	case 'documentos':
-	        		opts = ['Ao criar', 'Ao aprovar'];
-	        		break;
 	        }
 	        
 	        var combo = document.getElementById(tipoId);
@@ -117,11 +114,12 @@ var widgetFoT = SuperWidget.extend({
     },
     
     gatilhoAdd: function() {
-    	var nome = $('#nome_' + this.instanceId, this.DOM).val();
-    	var categoria = $('#categoria_' + this.instanceId, this.DOM).val();
-    	var tipo = $('#tipo_' + this.instanceId, this.DOM).val();
     	
-    	if( !nome || !categoria || !tipo ) {
+    	var idGatilho = $('#idGatilho_' + this.instanceId, this.DOM).val();
+    	var nome = $('#nome_' + this.instanceId, this.DOM).val();
+    	var comportamento = $('#comportamento_' + this.instanceId, this.DOM).val();
+    	var valor = $('#valor_' + this.instanceId, this.DOM).val();
+    	if( !idGatilho || !nome || !comportamento || !valor ) {
     		FLUIGC.toast({
 				title : 'Desculpe', 
 				message : 'Todos os campos s\u00e3o obrigat\u00f3rios.',
@@ -247,9 +245,10 @@ var widgetFoT = SuperWidget.extend({
 
 		switch( type ) {
 			case 'gatilho':
+				xml += 	'<cardData><field>idGatilho</field><value>' + $('#idGatilho_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
 				xml += 	'<cardData><field>nome</field><value>' + $('#nome_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>tipo</field><value>' + $('#tipo_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>categoria</field><value>' + $('#categoria_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+				xml += 	'<cardData><field>comportamento</field><value>' + $('#comportamento_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+				xml += 	'<cardData><field>valor</field><value>' + $('#valor_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
 				break;
 				
 			case 'acao':
