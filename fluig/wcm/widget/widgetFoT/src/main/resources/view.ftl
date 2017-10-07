@@ -58,18 +58,24 @@
 		    </div>
 		    <div class="panel-body">
 		        <form role="form">
-				    <div class="form-group">
-				        <label for="nome">ID</label>
-				        <input type="text" class="form-control" id="idGatilho_${instanceId}" placeholder="Digite o ID do gatilho" required>
-				    </div>
-				    <div class="form-group">
-				        <label for="nome">Nome</label>
-				        <input type="text" class="form-control" id="nome_${instanceId}" placeholder="Digite o nome do gatilho" required>
-				    </div>
+		        	<div class="row">
+		        		<div class="col-sm-3">
+		        			<div class="form-group">
+						        <label for="id">ID</label>
+						        <input type="text" class="form-control" id="idGatilho_${instanceId}" placeholder="ID" required>
+						    </div>
+		        		</div>
+		        		<div class="col-sm-9">
+		        			<div class="form-group">
+						        <label for="nome">Nome</label>
+						        <input type="text" class="form-control" id="nome_${instanceId}" placeholder="Nome" required>
+						    </div>		
+		        		</div> 
+		        	</div>
 				    <div class="row">
 				    	<div class="col-sm-6">
 					    	<div class="form-group">
-						        <label for="nome">Comportamento</label>
+						        <label for="comportamento">Comportamento</label>
 						        <select class="form-control" id="comportamento_${instanceId}" required>
 						        	<option></option>
 								    <option value="maiorIgual">Maior igual</option>
@@ -83,11 +89,16 @@
 						    </div>	
 				    	</div>
 				    	<div class="col-sm-6 form-group">
-					    	<label for="nome">Valor</label>
-					    	<input type="number" class="form-control" id="valor_${instanceId}" placeholder="Valor do gatilho" required>
+					    	<label for="valor">Valor</label>
+					    	<input type="number" class="form-control" id="valor_${instanceId}" placeholder="Valor" required>
 				    	</div>
 				    </div>
-				    
+				    <div class="form-group">
+					    	<label for="workflow">Workflow</label>
+					    	<select class="form-control" id="workflow_${instanceId}" required>
+					        	<option></option>
+							</select>
+			    	</div>
 				    <!-- <div class="row">
 				    	<div class="col-sm-6">
 					    	<div class="form-group">

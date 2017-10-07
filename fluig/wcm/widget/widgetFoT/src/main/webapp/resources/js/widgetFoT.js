@@ -17,6 +17,7 @@ var widgetFoT = SuperWidget.extend({
     
     initFoT: function() {
     	this.loadComboboxDS("gatilho_" + this.instanceId, "dsGatilhos", "nome", "nome", null);
+    	this.loadComboboxDS("workflow_" + this.instanceId, "processDefinition", "processDefinitionPK.processId", "processDescription", null);
         this.loadComboboxDS("acao_" + this.instanceId, "dsAcoes", "nome", "nome", null);
     },
     
