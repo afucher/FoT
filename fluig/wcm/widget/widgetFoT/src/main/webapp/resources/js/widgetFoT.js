@@ -17,6 +17,7 @@ var widgetFoT = SuperWidget.extend({
     
     initFoT: function() {
     	this.loadComboboxDS("gatilho_" + this.instanceId, "dsGatilhos", "nome", "nome", null);
+    	this.loadComboboxDS("workflow_" + this.instanceId, "processDefinition", "processDefinitionPK.processId", "processDescription", null);
         this.loadComboboxDS("acao_" + this.instanceId, "dsAcoes", "nome", "nome", null);
     },
     
@@ -119,7 +120,13 @@ var widgetFoT = SuperWidget.extend({
     	var nome = $('#nome_' + this.instanceId, this.DOM).val();
     	var comportamento = $('#comportamento_' + this.instanceId, this.DOM).val();
     	var valor = $('#valor_' + this.instanceId, this.DOM).val();
-    	if( !idGatilho || !nome || !comportamento || !valor ) {
+    	var workflow = $('#workflow_' + this.instanceId, this.DOM).val();
+    	var intervalo = $('#intervalo_' + this.instanceId, this.DOM).val();
+    	var ocorrencia = $('#ocorrencia_' + this.instanceId, this.DOM).val();
+    	
+    	debugger;
+    	
+    	if( !idGatilho || !nome || !comportamento || !valor || !workflow || !intervalo || !ocorrencia) {
     		FLUIGC.toast({
 				title : 'Desculpe', 
 				message : 'Todos os campos s\u00e3o obrigat\u00f3rios.',
@@ -249,6 +256,9 @@ var widgetFoT = SuperWidget.extend({
 				xml += 	'<cardData><field>nome</field><value>' + $('#nome_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
 				xml += 	'<cardData><field>comportamento</field><value>' + $('#comportamento_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
 				xml += 	'<cardData><field>valor</field><value>' + $('#valor_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+				xml += 	'<cardData><field>workflow</field><value>' + $('#workflow_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+				xml += 	'<cardData><field>intervalo</field><value>' + $('#intervalo_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+				xml += 	'<cardData><field>ocorrencia</field><value>' + $('#ocorrencia_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
 				break;
 				
 			case 'acao':
