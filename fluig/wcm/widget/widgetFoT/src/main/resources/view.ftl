@@ -81,7 +81,7 @@
 								    <option value="maiorIgual">Maior igual</option>
 								    <option value="menorIgual">Menor igual</option>
 								    <option value="maior">Maior</option>
-								    <option value="maior">Menor</option>
+								    <option value="menor">Menor</option>
 								    <option value="variacaoPositiva">Variação positiva</option>
 								    <option value="variacaoNegativa">Variação negativa</option>
 								    <option value="igual">Igual</option>
