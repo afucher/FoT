@@ -2,19 +2,53 @@ var widgetFoT = SuperWidget.extend({
 	instanceId: null,
 	widgetURI: null,
 	formGatilho: 12,
+	table: null,
 	
-
-    //método iniciado quando a widget é carregada
     init: function() {
-    	var $this = this;
     	widgetFoT.widgetURI = this.widgetURI;
     	widgetFoT.instanceId = this.instanceId;
 
         this.initFoT();
+        this.initDatatable();
     },
     
     initFoT: function() {
     	this.loadComboboxDS("workflow_" + this.instanceId, "processDefinition", "processDefinitionPK.processId", "processDescription", null);
+    },
+    
+    initDatatable: function(){
+    	
+		this.table = FLUIGC.datatable('#tbGatilhos_' + this.instanceId, {
+			dataRequest: [],
+			renderContent: ['idGatilho', 'nome', 'comportamento', 'valor', 'ocorrencia', 'intervalo', 'workflow'],
+			header: [
+				{'title':'ID', 'size': 'col-md-1'},
+				{'title':'Nome', 'size': 'col-md-1'},
+				{'title':'Comportamento', 'size': 'col-md-2'},
+				{'title':'Valor', 'size': 'col-md-1'},
+				{'title':'Ocorrencia', 'size': 'col-md-2'},
+				{'title':'Intervalo', 'size': 'col-md-1'},
+				{'title':'Workflow', 'size': 'col-md-2'}
+			],
+			emptyMessage: '<div class="text-center">Nenhum gatilho encontrado</div>',
+			navButtons: {
+				enabled: false
+			},
+			search:{
+				enabled: false
+			},
+			scroll: {
+				target: '#tbGatilhos',
+				enabled: true
+			},
+			tableStyle: 'table-bordered table-striped',
+			classSelected: 'info'	        
+		}, function(err, data) {
+
+		});
+		
+		this.loadDatatable();
+    	
     },
     
     //BIND de eventos
@@ -28,6 +62,41 @@ var widgetFoT = SuperWidget.extend({
  
     executeAction: function(htmlElement, event) {
     },
+    
+	clearDatatable: function(){
+		var numReg = this.table.getData().length;
+		for (var i = 0; i < numReg; i++) {
+			this.table.removeRow(0);
+		}
+	},
+	
+    loadDatatable: function(){
+    	
+    	this.clearDatatable();
+    	
+    	var dsGatilhos = DatasetFactory.getDataset("dsGatilhos", null, null, null);
+		
+		var datatable = [];
+		if (dsGatilhos.values.length > 0){
+			for (var i = 0; i < dsGatilhos.values.length; i++) {
+
+				var row = dsGatilhos.values[i];
+				
+				var reg = {
+					idGatilho: row['idGatilho'],
+					nome: row['nome'],
+					comportamento: row['comportamento'],
+					valor: row['valor'],
+					ocorrencia: row['ocorrencia'],
+					intervalo: row['intervalo'],
+					workflow: row['workflow']
+				};
+				
+				datatable.push(reg);
+			}			
+		}
+		this.table.reload(datatable);
+    },	
     
     loadComboboxDS: function(comboboxName, datasetName, key, value, contraintsMatriz){
         var constraints = null;
@@ -91,7 +160,7 @@ var widgetFoT = SuperWidget.extend({
     	} else {
     		
     		try{
-    			var result = this.saveForm('gatilho', this.formGatilho);
+    			var result = this.saveForm(this.formGatilho);
     			
     			if (result==null || result.status == 'error'){
     				throw "Erro ao salvar formul\u00e1rio: " + result.msg;
@@ -105,6 +174,7 @@ var widgetFoT = SuperWidget.extend({
     			});
     			
     			this.initFoT();
+    			this.loadDatatable();
     			
     		} catch (error) {
         		FLUIGC.toast({
@@ -119,11 +189,11 @@ var widgetFoT = SuperWidget.extend({
     },
     
     
-	saveForm: function(type, documentId){
+	saveForm: function(documentId){
 		var $this = this;
 		var result = null;
 		try{
-			var xmlRequest = this.getXmlRequestCreate(type, documentId);
+			var xmlRequest = this.getXmlRequestCreate(documentId);
 		
 			var parser=new DOMParser();
 			var dataRequest=parser.parseFromString(xmlRequest,"text/xml");
@@ -151,7 +221,7 @@ var widgetFoT = SuperWidget.extend({
 		return result;		
 	},
 	
-	getXmlRequestCreate: function(type, documentId){
+	getXmlRequestCreate: function(documentId){
 		
 		var $this = this;
 		var xml = '<?xml version="1.0" encoding="UTF-8"?>';
