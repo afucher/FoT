@@ -2,7 +2,6 @@ var widgetFoT = SuperWidget.extend({
 	instanceId: null,
 	widgetURI: null,
 	formGatilho: 12,
-	formAcao: 6,
 	
 
     //método iniciado quando a widget é carregada
@@ -12,60 +11,17 @@ var widgetFoT = SuperWidget.extend({
     	widgetFoT.instanceId = this.instanceId;
 
         this.initFoT();
-        this.initGatilhos();
     },
     
     initFoT: function() {
-    	this.loadComboboxDS("gatilho_" + this.instanceId, "dsGatilhos", "nome", "nome", null);
     	this.loadComboboxDS("workflow_" + this.instanceId, "processDefinition", "processDefinitionPK.processId", "processDescription", null);
-        this.loadComboboxDS("acao_" + this.instanceId, "dsAcoes", "nome", "nome", null);
     },
     
-    initGatilhos: function() {
-    	var categoriaId = '#categoria_' + this.instanceId;
-    	var tipoId = 'tipo_' + this.instanceId;
-    	var dom = this.DOM;
-    	
-    	$(categoriaId, dom).on('change', function() {
-    		var opts = [];
-	        switch( $(categoriaId, dom).val() ) {
-	        	case 'sensores':
-	        		opts = ['Dist\u00e2ncia', 'Temperatura', 'Press\u00e3o', 'Luminosidade'];
-	        		break;
-	        	case 'workflows':
-	        		opts = ['Ao iniciar', 'Ao movimentar'];
-	        		break;
-	        }
-	        
-	        var combo = document.getElementById(tipoId);
-	        $('#' + tipoId, dom).children().remove().end();
-	        
-	        for( var i = 0; i < opts.length; i++ ) {
-	        	var option = document.createElement("option");
-				option.text = opts[i];
-				option.value = opts[i];
-				try {
-					combo.add(option, null);
-				} catch (error) {
-					FLUIGC.toast({
-						title : 'Desculpe', 
-						message : 'Houve um problema no carregamento de alguns itens na p\u00e1gina. Tente novamente em alguns instantes.',
-						type : 'danger',
-						timeout : "4000"
-					});
-					combo.add(option);
-				}
-	        }
-	    });
-    },
- 
-  
     //BIND de eventos
     bindings: {
         local: {
             'execute': ['click_executeAction'],
-            'gatilho-add' : [ 'click_gatilhoAdd' ],
-            'acao-add' : [ 'click_acaoAdd' ]
+            'gatilho-add' : [ 'click_gatilhoAdd' ]
         },
         global: {}
     },
@@ -162,48 +118,6 @@ var widgetFoT = SuperWidget.extend({
     	}
     },
     
-    acaoAdd : function() {
-    	
-    	var nome = $('#nomeAc_' + this.instanceId, this.DOM).val();
-    	var tipo = $('#tipoAc_' + this.instanceId, this.DOM).val();
-    	var categoria = $('#categoriaAc_' + this.instanceId, this.DOM).val();
-    	
-    	if( !nome || !tipo || !categoria ) {
-    		FLUIGC.toast({
-				title : 'Desculpe', 
-				message : 'Todos os campos são obrigatósrios.',
-				type : 'danger',
-				timeout : "4000"
-			});
-    	
-    	} else {    	
-    	
-			try{
-				var result = this.saveForm('acao', this.formAcao);
-				
-				if (result==null || result.status == 'error'){
-					throw "Erro ao salvar formulário: " + result.msg;
-				}
-				
-				FLUIGC.toast({
-					title: 'Sucesso ',
-					message: 'Cadastro efetuado com sucesso!',
-					type: 'success',
-					timeout: 4000
-				});
-				
-				this.initFoT();
-				
-			} catch (error) {
-        		FLUIGC.toast({
-    				title : 'Desculpe', 
-    				message : 'Erro ao salvar dados',
-    				type : 'danger',
-    				timeout : "4000"
-    			});
-			}
-    	}
-    },
     
 	saveForm: function(type, documentId){
 		var $this = this;
@@ -247,25 +161,13 @@ var widgetFoT = SuperWidget.extend({
 		xml += '<companyId>' + WCMAPI.organizationId + '</companyId>';
 		xml += '<username></username><password></password>';
 		xml += '<card><item>';
-
-		switch( type ) {
-			case 'gatilho':
-				xml += 	'<cardData><field>idGatilho</field><value>' + $('#idGatilho_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>nome</field><value>' + $('#nome_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>comportamento</field><value>' + $('#comportamento_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>valor</field><value>' + $('#valor_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>workflow</field><value>' + $('#workflow_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>intervalo</field><value>' + $('#intervalo_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>ocorrencia</field><value>' + $('#ocorrencia_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				break;
-				
-			case 'acao':
-				xml += 	'<cardData><field>nome</field><value>' + $('#nomeAc_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>tipo</field><value>' + $('#tipoAc_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>categoria</field><value>' + $('#categoriaAc_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				break;
-		}
-		
+		xml += 	'<cardData><field>idGatilho</field><value>' + $('#idGatilho_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>nome</field><value>' + $('#nome_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>comportamento</field><value>' + $('#comportamento_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>valor</field><value>' + $('#valor_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>workflow</field><value>' + $('#workflow_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>intervalo</field><value>' + $('#intervalo_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>ocorrencia</field><value>' + $('#ocorrencia_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
 		xml += '<parentDocumentId>' + documentId + '</parentDocumentId>';
 		xml += '</item></card>';
 		xml += '</ws:create>';
