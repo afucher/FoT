@@ -2,3 +2,5 @@ teste
 fluig/.project
 fluig/.settings
 **/target/**
+*.metadata
+**/.resources/**
