@@ -5,4 +5,4 @@ fluig/.settings
 *.metadata
 **/.resources/**
 .DS_Store
-broker/node_modules/*
+fot_broker/node_modules/*
