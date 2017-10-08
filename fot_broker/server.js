@@ -20,7 +20,7 @@ io.on('connection', function(socket){
         fluig.getRules(socket.sensor.id).then( rRules => {
             socket.sensor.rules = rRules;
             console.log("got rules, emit interval");
-            socket.emit('interval', 1);
+            socket.emit('interval', 2);
         }).catch( error => {
             console.log("Error while getting rules for sensor " + socket.sensor.id);
             console.error(error);
@@ -42,7 +42,7 @@ io.on('connection', function(socket){
                     //console.error(error);
                 });
             } else {
-                console.log("Rule not triggered. Measure: " + measure);
+                //console.log("Rule not triggered. Measure: " + measure);
             }
         }
     });
