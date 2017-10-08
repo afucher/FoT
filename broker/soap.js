@@ -2,12 +2,13 @@ module.exports = function() {
     var http = require('http');
     var Promise = require('bluebird');
     var parseString = require('xml2js').parseString;
+    var conf = require('./config.json');
 
-    function call(host, path, data) {
+    function call(path, data) {
         var options = {
-            protocol: 'http:',
-            host: host,
-            port: 8080,
+            protocol: conf.fluig.protocol + ':',
+            host: conf.fluig.host,
+            port: conf.fluig.port,
             method: 'POST',
             path: path,
             headers: { 'Content-type': 'text/xml' }
@@ -29,12 +30,7 @@ module.exports = function() {
               
                 response.on('end', function () {
                   parseString(str, function (err, result) {
-                      retorno = {
-                        colunas: result['soap:Envelope']['soap:Body'][0]['ns1:getDatasetResponse'][0].dataset[0].columns,
-                        valores: result['soap:Envelope']['soap:Body'][0]['ns1:getDatasetResponse'][0].dataset[0].values
-                      }
-
-                      resolve(retorno);
+                      resolve(result['soap:Envelope']['soap:Body']);
                   });
     
                 });
