@@ -123,9 +123,7 @@ var widgetFoT = SuperWidget.extend({
     	var workflow = $('#workflow_' + this.instanceId, this.DOM).val();
     	var intervalo = $('#intervalo_' + this.instanceId, this.DOM).val();
     	var ocorrencia = $('#ocorrencia_' + this.instanceId, this.DOM).val();
-    	
-    	debugger;
-    	
+    	    	
     	if( !idGatilho || !nome || !comportamento || !valor || !workflow || !intervalo || !ocorrencia) {
     		FLUIGC.toast({
 				title : 'Desculpe', 
