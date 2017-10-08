@@ -67,11 +67,12 @@
 							
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label for="ocorrencia">Ocorrencias</label>
+										<label for="ocorrencia">Ocorrências</label>
 										<input type="number" class="form-control" pattern="[0-9]+$"
 											value="1" min="1" step="1" id="ocorrencia_${instanceId}"
 											placeholder="Ocorrências" required>
 									</div>
+
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
