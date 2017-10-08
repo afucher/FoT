@@ -14,7 +14,11 @@ const char* password = "01010101";
 
 //GPIO's nodemcu
 const int trigPin = 2;  //D4
-const int echoPin = 0;  //D3
+const int echoPin = 5;  //D3
+
+const int powerLed = 4;  //D2
+boolean isLedOn = false;
+
 long duration;
 int distance;
 
@@ -48,7 +52,7 @@ void setup() {
 
   //connect websocket
 
-    webSocket.begin("10.172.16.156",3000);
+    webSocket.begin("fluig05.hackathon2017.fluig.io",3000);
       
     webSocket.on("established", setEstablished);
     webSocket.on("interval", setInterval);
@@ -59,6 +63,7 @@ void setup() {
     pinMode(echoPin, INPUT); // Sets the echoPin as an Input
     pinMode(BUILTIN_LED, OUTPUT);
 
+    pinMode(powerLed, OUTPUT); // Sets the trigPin as an Output
 
 } 
 
@@ -83,6 +88,8 @@ void setDisconnected(const char * _disconnected, size_t length) {
 }
 
 void loop() {      
+
+      
       webSocket.loop();
       long currentMillis = millis();
 
@@ -102,6 +109,14 @@ void loop() {
         distance= duration*0.034/2;
           
       if(isConnected && interval != 0 && ((currentMillis - previousMillis) >= (interval*1000) ) ){
+           if( !isLedOn ){
+               digitalWrite(powerLed, HIGH);
+           }else{
+               digitalWrite(powerLed, LOW);            
+           }
+           
+           isLedOn = !isLedOn;
+           
            previousMillis = currentMillis ;
            // Prints the distance on the Serial Monitor
            USE_SERIAL.printf("Distance: ");
