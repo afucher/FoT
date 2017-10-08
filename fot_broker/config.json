@@ -1,0 +1,7 @@
+{
+    "fluig" : {
+        "host" : "fluig05.hackathon2017.fluig.io",
+        "port" : 8080,
+        "protocol" : "http"
+    }
+}
