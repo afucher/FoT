@@ -9,22 +9,57 @@ function onSync(lastSyncDate) {
 function createDataset(fields, constraints, sortFields) {
 	var dataset = DatasetBuilder.newDataset();
     
-    //Cria as colunas
-    dataset.addColumn("Sigla");
-    dataset.addColumn("Estado");
-    dataset.addColumn("Capital");
-    dataset.addColumn("Area");
-      
-    //Cria os registros
-    dataset.addRow(new Array("AM", "Amazonas", "Manaus", 1570746));
-    dataset.addRow(new Array("PA", "Pará", "Belém", 1247690));
-    dataset.addRow(new Array("MT", "Mato Grosso", "Cuiabá", 903358));
-    dataset.addRow(new Array("TO", "Tocantins", "Palmas", 277621));
-    dataset.addRow(new Array("PI", "Piauí", "Teresina", 251529));
-     
+	var tempDataset = getDefaultValues();
+	
+    dataset.addColumn("SensorID");
+    dataset.addColumn("Behavior");
+    dataset.addColumn("Value");
+    
+    if(constraints!=null && constraints.length > 0){
+
+        for(var a=0;a < tempDataset.length;a++){
+            if(constraints[0].initialValue==tempDataset[a][constraints[0].fieldName]){
+                dataset.addRow(new Array(tempDataset[a]["SensorID"], tempDataset[a]["Behavior"],tempDataset[a]["Value"]));
+            }
+        }
+    
+    } else {
+    	for(var a=0;a < tempDataset.length;a++){
+    		dataset.addRow(new Array(tempDataset[a]["SensorID"], tempDataset[a]["Behavior"],tempDataset[a]["Value"]));
+    	}
+    }
+    
     return dataset;
 }
 
 function onMobileSync(user) {
 
+}
+
+function getDefaultValues(){
+return  [{
+			SensorID: "0001",
+			Behavior: "<",
+			Value: "15"
+        },
+        {
+        	SensorID: "0002",
+        	Behavior: "<=",
+        	Value: "10"
+        },
+        {
+        	SensorID: "0003",
+        	Behavior: ">=",
+        	Value: "25"
+        },
+        {
+        	SensorID: "0004",
+        	Behavior: ">",
+        	Value: "100"
+        },
+        {
+        	SensorID: "0005",
+        	Behavior: "=",
+        	Value: "50"
+        }];
 }
