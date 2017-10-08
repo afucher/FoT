@@ -2,76 +2,101 @@ var widgetFoT = SuperWidget.extend({
 	instanceId: null,
 	widgetURI: null,
 	formGatilho: 12,
-	formAcao: 6,
+	table: null,
 	
-
-    //método iniciado quando a widget é carregada
     init: function() {
-    	var $this = this;
     	widgetFoT.widgetURI = this.widgetURI;
     	widgetFoT.instanceId = this.instanceId;
 
         this.initFoT();
-        this.initGatilhos();
+        this.initDatatable();
     },
     
     initFoT: function() {
-    	this.loadComboboxDS("gatilho_" + this.instanceId, "dsGatilhos", "nome", "nome", null);
     	this.loadComboboxDS("workflow_" + this.instanceId, "processDefinition", "processDefinitionPK.processId", "processDescription", null);
-        this.loadComboboxDS("acao_" + this.instanceId, "dsAcoes", "nome", "nome", null);
     },
     
-    initGatilhos: function() {
-    	var categoriaId = '#categoria_' + this.instanceId;
-    	var tipoId = 'tipo_' + this.instanceId;
-    	var dom = this.DOM;
+    initDatatable: function(){
     	
-    	$(categoriaId, dom).on('change', function() {
-    		var opts = [];
-	        switch( $(categoriaId, dom).val() ) {
-	        	case 'sensores':
-	        		opts = ['Dist\u00e2ncia', 'Temperatura', 'Press\u00e3o', 'Luminosidade'];
-	        		break;
-	        	case 'workflows':
-	        		opts = ['Ao iniciar', 'Ao movimentar'];
-	        		break;
-	        }
-	        
-	        var combo = document.getElementById(tipoId);
-	        $('#' + tipoId, dom).children().remove().end();
-	        
-	        for( var i = 0; i < opts.length; i++ ) {
-	        	var option = document.createElement("option");
-				option.text = opts[i];
-				option.value = opts[i];
-				try {
-					combo.add(option, null);
-				} catch (error) {
-					FLUIGC.toast({
-						title : 'Desculpe', 
-						message : 'Houve um problema no carregamento de alguns itens na p\u00e1gina. Tente novamente em alguns instantes.',
-						type : 'danger',
-						timeout : "4000"
-					});
-					combo.add(option);
-				}
-	        }
-	    });
+		this.table = FLUIGC.datatable('#tbGatilhos_' + this.instanceId, {
+			dataRequest: [],
+			renderContent: ['idGatilho', 'nome', 'comportamento', 'valor', 'ocorrencia', 'intervalo', 'workflow'],
+			header: [
+				{'title':'ID', 'size': 'col-md-1'},
+				{'title':'Nome', 'size': 'col-md-1'},
+				{'title':'Comportamento', 'size': 'col-md-2'},
+				{'title':'Valor', 'size': 'col-md-1'},
+				{'title':'Ocorrencia', 'size': 'col-md-2'},
+				{'title':'Intervalo', 'size': 'col-md-1'},
+				{'title':'Workflow', 'size': 'col-md-2'}
+			],
+			emptyMessage: '<div class="text-center">Nenhum gatilho encontrado</div>',
+			navButtons: {
+				enabled: false
+			},
+			search:{
+				enabled: false
+			},
+			scroll: {
+				target: '#tbGatilhos',
+				enabled: true
+			},
+			tableStyle: 'table-bordered table-striped',
+			classSelected: 'info'	        
+		}, function(err, data) {
+
+		});
+		
+		this.loadDatatable();
+    	
     },
- 
-  
+    
     //BIND de eventos
     bindings: {
         local: {
             'execute': ['click_executeAction'],
-            'gatilho-add' : [ 'click_gatilhoAdd' ],
-            'acao-add' : [ 'click_acaoAdd' ]
+            'gatilho-add' : [ 'click_gatilhoAdd' ]
         },
         global: {}
     },
  
     executeAction: function(htmlElement, event) {
     },
+    
+	clearDatatable: function(){
+		var numReg = this.table.getData().length;
+		for (var i = 0; i < numReg; i++) {
+			this.table.removeRow(0);
+		}
+	},
+	
+    loadDatatable: function(){
+    	
+    	this.clearDatatable();
+    	
+    	var dsGatilhos = DatasetFactory.getDataset("dsGatilhos", null, null, null);
+		
+		var datatable = [];
+		if (dsGatilhos.values.length > 0){
+			for (var i = 0; i < dsGatilhos.values.length; i++) {
+
+				var row = dsGatilhos.values[i];
+				
+				var reg = {
+					idGatilho: row['idGatilho'],
+					nome: row['nome'],
+					comportamento: row['comportamento'],
+					valor: row['valor'],
+					ocorrencia: row['ocorrencia'],
+					intervalo: row['intervalo'],
+					workflow: row['workflow']
+				};
+				
+				datatable.push(reg);
+			}			
+		}
+		this.table.reload(datatable);
+    },	
     
     loadComboboxDS: function(comboboxName, datasetName, key, value, contraintsMatriz){
         var constraints = null;
@@ -135,7 +160,7 @@ var widgetFoT = SuperWidget.extend({
     	} else {
     		
     		try{
-    			var result = this.saveForm('gatilho', this.formGatilho);
+    			var result = this.saveForm(this.formGatilho);
     			
     			if (result==null || result.status == 'error'){
     				throw "Erro ao salvar formul\u00e1rio: " + result.msg;
@@ -149,6 +174,7 @@ var widgetFoT = SuperWidget.extend({
     			});
     			
     			this.initFoT();
+    			this.loadDatatable();
     			
     		} catch (error) {
         		FLUIGC.toast({
@@ -162,54 +188,12 @@ var widgetFoT = SuperWidget.extend({
     	}
     },
     
-    acaoAdd : function() {
-    	
-    	var nome = $('#nomeAc_' + this.instanceId, this.DOM).val();
-    	var tipo = $('#tipoAc_' + this.instanceId, this.DOM).val();
-    	var categoria = $('#categoriaAc_' + this.instanceId, this.DOM).val();
-    	
-    	if( !nome || !tipo || !categoria ) {
-    		FLUIGC.toast({
-				title : 'Desculpe', 
-				message : 'Todos os campos são obrigatósrios.',
-				type : 'danger',
-				timeout : "4000"
-			});
-    	
-    	} else {    	
-    	
-			try{
-				var result = this.saveForm('acao', this.formAcao);
-				
-				if (result==null || result.status == 'error'){
-					throw "Erro ao salvar formulário: " + result.msg;
-				}
-				
-				FLUIGC.toast({
-					title: 'Sucesso ',
-					message: 'Cadastro efetuado com sucesso!',
-					type: 'success',
-					timeout: 4000
-				});
-				
-				this.initFoT();
-				
-			} catch (error) {
-        		FLUIGC.toast({
-    				title : 'Desculpe', 
-    				message : 'Erro ao salvar dados',
-    				type : 'danger',
-    				timeout : "4000"
-    			});
-			}
-    	}
-    },
     
-	saveForm: function(type, documentId){
+	saveForm: function(documentId){
 		var $this = this;
 		var result = null;
 		try{
-			var xmlRequest = this.getXmlRequestCreate(type, documentId);
+			var xmlRequest = this.getXmlRequestCreate(documentId);
 		
 			var parser=new DOMParser();
 			var dataRequest=parser.parseFromString(xmlRequest,"text/xml");
@@ -237,7 +221,7 @@ var widgetFoT = SuperWidget.extend({
 		return result;		
 	},
 	
-	getXmlRequestCreate: function(type, documentId){
+	getXmlRequestCreate: function(documentId){
 		
 		var $this = this;
 		var xml = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -247,25 +231,13 @@ var widgetFoT = SuperWidget.extend({
 		xml += '<companyId>' + WCMAPI.organizationId + '</companyId>';
 		xml += '<username></username><password></password>';
 		xml += '<card><item>';
-
-		switch( type ) {
-			case 'gatilho':
-				xml += 	'<cardData><field>idGatilho</field><value>' + $('#idGatilho_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>nome</field><value>' + $('#nome_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>comportamento</field><value>' + $('#comportamento_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>valor</field><value>' + $('#valor_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>workflow</field><value>' + $('#workflow_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>intervalo</field><value>' + $('#intervalo_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>ocorrencia</field><value>' + $('#ocorrencia_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				break;
-				
-			case 'acao':
-				xml += 	'<cardData><field>nome</field><value>' + $('#nomeAc_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>tipo</field><value>' + $('#tipoAc_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				xml += 	'<cardData><field>categoria</field><value>' + $('#categoriaAc_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
-				break;
-		}
-		
+		xml += 	'<cardData><field>idGatilho</field><value>' + $('#idGatilho_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>nome</field><value>' + $('#nome_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>comportamento</field><value>' + $('#comportamento_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>valor</field><value>' + $('#valor_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>workflow</field><value>' + $('#workflow_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>intervalo</field><value>' + $('#intervalo_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
+		xml += 	'<cardData><field>ocorrencia</field><value>' + $('#ocorrencia_' + $this.instanceId, $this.DOM).val() + '</value></cardData>';
 		xml += '<parentDocumentId>' + documentId + '</parentDocumentId>';
 		xml += '</item></card>';
 		xml += '</ws:create>';
